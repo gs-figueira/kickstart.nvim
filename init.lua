@@ -171,6 +171,10 @@ do
   -- instead raise a dialog asking if you wish to save the current file(s)
   -- See `:help 'confirm'`
   vim.o.confirm = true
+
+  -- Tab settings
+  vim.o.tabstop = 4
+  vim.o.shiftwidth = 4
 end
 
 -- ============================================================
@@ -779,6 +783,12 @@ do
     },
   }
 
+  local system_servers = {
+    ols = {},
+    pyright = {},
+    ruff = {},
+  }
+
   vim.pack.add {
     gh 'neovim/nvim-lspconfig',
     gh 'mason-org/mason.nvim',
@@ -808,10 +818,18 @@ do
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-  for name, server in pairs(servers) do
+  -- for name, server in pairs(servers) do
+  --   vim.lsp.config(name, server)
+  --   vim.lsp.enable(name)
+  -- end
+
+  for name, server in pairs(vim.tbl_extend('error', servers, system_servers)) do
     vim.lsp.config(name, server)
     vim.lsp.enable(name)
   end
+
+
+
 end
 
 -- ============================================================
